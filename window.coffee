@@ -18,6 +18,7 @@ miniLockLib.Blob.hasMiniLockFileFormat = (blob, respond) ->
 
 window.operations = new Backbone.Collection
 window.files = new Backbone.Collection
+window.trash = new Backbone.Collection
 window.links = new Backbone.Collection
 window.force = d3.layout.force()
 
@@ -33,17 +34,40 @@ else
 
 document.addEventListener "DOMContentLoaded", (event) ->
   Function.delay 1, -> document.body.classList.add "ready"
-  svg = d3.select("body").append("svg").attr("id", "view")
+  d3.select(document.body).append("svg").attr("id", "view")
   render()
+  renderAddButton()
+  renderTrashButton()
   files.on add: render, remove: render
   window.onresize = render
+
+renderTrashButton = ->
+  group = d3.select("#view").append("g").attr("id", "trash")
+  group.attr transform: "translate(#{innerWidth-32}, #{innerHeight-32})"
+  group.append("circle").attr("r", 32)
+  icon = group.append -> iconGraphic "trash"
+  icon.attr
+    width: 32
+    height: 32
+    x: -16
+    y: -16
+
+renderAddButton = ->
+  group = d3.select("#view").append("g").attr("id", "add")
+  group.attr transform: "translate(32, 32)"
+  group.append("circle").attr("r", 32)
+  icon = group.append -> iconGraphic "add"
+  icon.attr
+    width: 32
+    height: 32
+    x: -16
+    y: -16
 
 render = ->
   svg = d3.select("#view")
   svg.attr width: window.innerWidth, height: window.innerHeight
   render.cache.files = files.toArray()
   render.cache.links = links.toJSON()
-  # force.friction 0.1
   force.gravity 0.002
   force.charge -75
   force.linkDistance 150
@@ -65,7 +89,7 @@ render = ->
     class: "handle"
     r: 66
   group.append (file) ->
-    iconGraphic file.get("data").type
+    mediaTypeIconGraphic file.get("data").type
   group.append("text").attr
     class: "name"
   group.append("text").attr
@@ -84,23 +108,29 @@ render.cache = {}
 
 force.on "tick", ->
   svg = d3.select("#view")
-  link = svg.selectAll(".link").data(render.cache.links)
+  link = svg.selectAll("line.link").data(render.cache.links)
   link.attr "x1", (d) -> d.source.x
   link.attr "y1", (d) -> d.source.y
   link.attr "x2", (d) -> d.target.x
   link.attr "y2", (d) -> d.target.y
-  svg.selectAll(".node").data(render.cache.files).attr
+  svg.selectAll("g.file.node").data(render.cache.files).attr
     "x": (d) -> d.x
     "y": (d) -> d.y
-  handle = svg.selectAll("circle.handle").data(render.cache.files).attr
+  svg.selectAll("g.file.node svg.icon").data(render.cache.files).attr
+    x: (file) -> file.x - 56/2
+    y: (file) -> file.y - 64 - 50
+    height: 64
+    width: 56
+  svg.selectAll("g.file.node circle.handle").data(render.cache.files).attr
     transform: (d) -> "translate(#{d.x}, #{d.y-66})"
     r: 66
-  name = svg.selectAll(".name").data(render.cache.files)
-  name.text (file) -> file.get("name")
-  name.attr "transform": (d) -> "translate(#{d.x}, #{d.y-30-2})"
-  size = svg.selectAll("circle.size").data(render.cache.files)
-  size.attr "transform": (d) -> "translate(#{d.x}, #{d.y})"
-  time = svg.selectAll("text.time").data(render.cache.files).attr
+  svg.selectAll("g.file.node circle.size").data(render.cache.files).attr
+    "transform": (d) -> "translate(#{d.x}, #{d.y})"
+  name = svg.selectAll("g.file.node text.name").data(render.cache.files).attr
+    transform: (d) -> "translate(#{d.x}, #{d.y-30-2})"
+  name.text (file) ->
+    file.get("name")
+  time = svg.selectAll("g.file.node text.time").data(render.cache.files).attr
     class: (file) -> if file.get("data").lastModified then "time" else "undefined time"
     transform: (file) -> "translate(#{file.x}, #{file.y-20})"
   time.text (file) ->
@@ -108,19 +138,15 @@ force.on "tick", ->
       moment(file.get("data").lastModified).fromNow()
     else
       "undefined"
-  size = svg.selectAll("text.size").data(render.cache.files)
-  size.attr "transform": (d) -> "translate(#{d.x}, #{d.y-10})"
-  size.text (file) -> formatSizeOfFile file.get("data").size
-  type = svg.selectAll(".type").data(render.cache.files)
-  type.text (file) -> file.get("data").type or 'undefined'
-  type.attr
+  sizeLabel = svg.selectAll("g.file.node text.size").data(render.cache.files).attr
+    transform: (d) -> "translate(#{d.x}, #{d.y-10})"
+  sizeLabel.text (file) ->
+    formatSizeOfFile file.get("data").size
+  mediaTypeLabel = svg.selectAll("g.file.node text.type").data(render.cache.files).attr
     class: (file) -> if file.get("data").type then "type" else "undefined type"
     transform: (file) -> "translate(#{file.x}, #{file.y})"
-  svg.selectAll("svg.icon").data(render.cache.files).attr
-    x: (file) -> file.x - 56/2
-    y: (file) -> file.y - 64 - 50
-    height: 64
-    width: 56
+  mediaTypeLabel.text (file) ->
+    file.get("data").type or 'undefined'
 
 
 document.addEventListener "DOMContentLoaded", (event) ->
@@ -171,18 +197,48 @@ makeREADME = ->
 
 # Click a file to download it.
 document.addEventListener "mousedown", (event) ->
-  if event.target.parentNode.classList.contains("file", "node")
-    file = files.get event.target.parentNode.id
-    event.target.addEventListener "mousemove", abortIfMouseIsMoved = ->
-      removeEventListeners()
-    event.target.addEventListener "mouseup", downloadWhenMouseIsUp = ->
-      removeEventListeners()
-      download(file)
-    removeEventListeners = ->
-      event.target.removeEventListener "mouseup", downloadWhenMouseIsUp
-      event.target.removeEventListener "mousemove", abortIfMouseIsMoved
-  else
-    console.info "Not a file node"
+  console.info event.target
+  parentNode = event.target.parentNode
+  switch
+    when parentNode.classList.contains("file", "node")
+      mouseDownOnFileNode(event)
+    when parentNode.id is "trash"
+      console.info "Open trash"
+    when parentNode.id is "add"
+      mouseDownOnAddButton(event)
+    else
+      console.info "Not responsible for", event.target
+
+document.addEventListener "change", (event) ->
+  if event.target.type is "file"
+    for file in event.target.files
+      added = files.add {data: file, name: file.name}
+      added.x = added.px = innerWidth / 3
+      added.y = added.py = innerHeight / 3
+      miniLockLib.Blob.hasMiniLockFileFormat file, (blobHasMiniLockFileFormat) ->
+        if blobHasMiniLockFileFormat
+          Function.delay 333, -> decrypt(added)
+        else
+          Function.delay 333, -> encrypt(added)
+
+
+
+mouseDownOnAddButton = (event) ->
+  event.preventDefault()
+  document.querySelector("input[type=file]").click()
+
+
+mouseDownOnFileNode = (event) ->
+  file = files.get event.target.parentNode.id
+  event.target.addEventListener "mousemove", abortIfMouseIsMoved = ->
+    removeEventListeners()
+  event.target.addEventListener "mouseup", downloadWhenMouseIsUp = ->
+    removeEventListeners()
+    download(file)
+  removeEventListeners = ->
+    event.target.removeEventListener "mouseup", downloadWhenMouseIsUp
+    event.target.removeEventListener "mousemove", abortIfMouseIsMoved
+
 
 # Save a copy of the file to the local file system.
 download = (file) ->
@@ -253,11 +309,14 @@ formatSizeOfFile = (bytes) ->
 	if (MB < 1024)
 		return (Math.round(MB * 10) / 10) + " MB"
 
-iconGraphic = (type="application/octet-stream", name="undefined") ->
+mediaTypeIconGraphic = (type="application/octet-stream", name="undefined") ->
   console.info "iconGraphic", type
   if type in ["application/minilock"] then name = "minilock"
   if type.match("text/") then name = "text"
   if type.match("image/") then name = "image"
   if type is "application/zip" then name = "zip"
   if type is "application/pdf" then name = "pdf"
+  document.body.querySelector("body > svg.#{name}.icon").cloneNode(true)
+
+iconGraphic = (name) ->
   document.body.querySelector("body > svg.#{name}.icon").cloneNode(true)

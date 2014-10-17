@@ -10,9 +10,15 @@ svg.icon {
   pointer-events: none;
 }
 
+input[type=file],
 body > svg.icon,
 text.type {
   display: none;
+}
+
+#trash circle,
+#add circle {
+  fill: transparent;
 }
 
 /* --- */

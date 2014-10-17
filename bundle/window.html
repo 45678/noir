@@ -2,6 +2,7 @@
 <meta charset="UTF-8">
 <title>noir</title>
 <script src="window.js"></script>
+<input type="file" multiple>
 <style>
 line, circle, svg.icon {
   user-select: none;
@@ -15,9 +16,15 @@ svg.icon {
   pointer-events: none;
 }
 
+input[type=file],
 body > svg.icon,
 text.type {
   display: none;
+}
+
+#trash circle,
+#add circle {
+  fill: transparent;
 }
 
 /* --- */

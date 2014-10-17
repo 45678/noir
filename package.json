@@ -2,7 +2,7 @@
   "name": "noir",
   "private": true,
   "scripts": {
-    "start": "make; wr make *.coffee *.html graphics/*.svg"
+    "start": "make; wr make *.coffee *.html *.css graphics/*.svg"
   },
   "devDependencies": {
     "backbone": "^1.1.2",

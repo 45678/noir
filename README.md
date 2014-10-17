@@ -1,4 +1,4 @@
-Noir is miniLock encryption with minimal decoration.
+__Noir__ is miniLock encryption with minimal decoration.
 
 Get [https://45678.github.io/noir](45678.github.io/noir) to start a session.
 

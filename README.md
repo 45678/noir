@@ -1,26 +1,24 @@
 Noir
 ----
 
-Noir is [miniLock](https://minilock.io) encryption with minimal decoration.
-It mostly works in Google Chrome.
+__Noir__ is [miniLock](https://minilock.io) encryption with minimal decoration.
+It mostly works in [Google Chrome](https://www.google.com/chrome/).
 
-Get Noir to start a session:
+Visit [__45678.github.io/noir__](https://45678.github.io/noir) to start a session and try it out.
 
-    open https://45678.github.io/noir
+Download [__Noir.crx__](https://45678.github.io/noir/Noir.crx) to keep an instance on your personal computer.
+When the download is complete, open `chrome://extensions` and drag the __Noir.crx__ file onto your Extensions page to install the app.
+You can launch __Noir__ with the Chrome Apps Launcher or open __Noir__ from your Chrome Apps folder.
+__Noir__ will update itself automatically when new versions are available.
 
-Download Noir for Google Chrome to keep the app on your personal computer:
-
-    curl https://45678.github.io/noir/Noir.crx > Noir.crx
-    open Noir.crx
-
-Or clone the Noir code and run it from source:
+Or clone __Noir__ and run it from source:
 
     git clone https://github.com/45678/noir.git
     cd noir
     make bundle
     open bundle/window.html
 
-Or host Noir on your personal computer with [Pow](http://pow.cx/):
+Or host __Noir__ on your personal computer with [Pow](http://pow.cx/):
 
     git clone https://github.com/45678/noir.git
     cd noir

@@ -57,3 +57,4 @@ deploy:
 	git add --all
 	git commit --message "Committed with make deploy."
 	git checkout master
+	git push origin gh-pages

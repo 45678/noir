@@ -2,7 +2,7 @@ Load noir to start a session.
 
 Drop files on the window to add them to the workspace.
 
-Click + to to select files from with the operating system file dialog box.
+Click the + button to select files from with the operating system file chooser dialog box.
 
 Click any file in the workspace to save it.
 

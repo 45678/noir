@@ -15,14 +15,14 @@ Download Noir for Google Chrome to keep the app on your personal computer:
 
 Or clone the Noir code and run it from source:
 
-    git clone https://45678.github.io/noir.git
+    git clone https://github.com/45678/noir.git
     cd noir
     make bundle
     open bundle/window.html
 
 Or host Noir on your personal computer with [Pow](http://pow.cx/):
 
-    git clone https://45678.github.io/noir.git
+    git clone https://github.com/45678/noir.git
     cd noir
     make bundle pow
     open http://noir.dev/window.html

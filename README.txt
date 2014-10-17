@@ -1,7 +1,12 @@
-Drop files on the window to add them to your workspace.
+Drop files on the window to add them to the workspace.
 
-Press <Add files> at the bottom of the window to select files from with the operating system file dialog box.
+Click + to to select files from with the operating system file dialog box.
 
-Press the size label to save a file to disk.
+Click any file in the workspace to save it.
 
-Press the name label to change it.
+Click the camera button to make a photograph in the workspace.
+
+Drag a file to the trash to remove it from the workspace.
+
+• Somehow define permits.
+• Somehow define keys.

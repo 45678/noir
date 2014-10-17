@@ -167,7 +167,26 @@ makeKeys = ->
     makeREADME()
 
 makeREADME = ->
-  README = new Blob ["Read this first!"], type: "text/plain"
+  text = """
+    NOIR
+    miniLock encryption with minimal decoration
+
+    Drop files on the window to add them to the workspace.
+
+    Or click the + button to select files from with the operating system file chooser dialog box.
+
+    Click any file in the workspace to save it.
+
+    Click the camera button to make a photograph in the workspace.
+
+    Drag a file to the trash to remove it from the workspace.
+
+    Close the window or quit to end the session.
+
+    • Somehow define permits.
+    • Somehow define keys.
+  """
+  README = new Blob [text], type: "text/plain"
   encryptOperation = operations.add miniLockLib.encrypt
     data: README
     name: "Readme.txt"

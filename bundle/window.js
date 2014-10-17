@@ -25555,8 +25555,9 @@ nacl.setPRNG = function(fn) {
   };
 
   makeREADME = function() {
-    var README, encryptOperation;
-    README = new Blob(["Read this first!"], {
+    var README, encryptOperation, text;
+    text = "NOIR\nminiLock encryption with minimal decoration\n\nDrop files on the window to add them to the workspace.\n\nOr click the + button to select files from with the operating system file chooser dialog box.\n\nClick any file in the workspace to save it.\n\nClick the camera button to make a photograph in the workspace.\n\nDrag a file to the trash to remove it from the workspace.\n\nClose the window or quit to end the session.\n\n• Somehow define permits.\n• Somehow define keys.";
+    README = new Blob([text], {
       type: "text/plain"
     });
     return encryptOperation = operations.add(miniLockLib.encrypt({

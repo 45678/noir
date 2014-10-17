@@ -7,8 +7,8 @@
   createNoirAppWindow = function() {
     var options;
     options = {
-      minWidth: 640,
-      minHeight: 640
+      minWidth: 750,
+      minHeight: 650
     };
     return chrome.app.window.create("window.html", options, function(appWindow) {
       return noirAppWindow = appWindow;

@@ -4,6 +4,18 @@ d3 = require "d3"
 miniLockLib = require "miniLockLib"
 moment = require "moment"
 
+miniLockLib.Blob = {}
+miniLockLib.Blob.hasMiniLockFileFormat = (blob, respond) ->
+  if blob is undefined
+    throw "miniLockLib.Blob.hasMiniLockFileFormat received undefined blob."
+  if blob.slice.constructor isnt Function
+    throw "miniLockLib.Blob.hasMiniLockFileFormat received unacceptable blob."
+  reader = new FileReader
+  reader.onload = -> respond reader.result is "miniLock"
+  reader.onerror = -> respond no
+  reader.readAsText blob.slice(0, 8)
+  return undefined
+
 window.operations = new Backbone.Collection
 window.files = new Backbone.Collection
 window.links = new Backbone.Collection
@@ -195,7 +207,11 @@ document.addEventListener "drop", (event) ->
     added = files.add {data: blob, name: blob.name}
     added.x = added.px = event.x
     added.y = added.py = event.y
-    Function.delay 333, -> encrypt(added)
+    miniLockLib.Blob.hasMiniLockFileFormat blob, (blobHasMiniLockFileFormat) ->
+      if blobHasMiniLockFileFormat
+        Function.delay 333, -> decrypt(added)
+      else
+        Function.delay 333, -> encrypt(added)
 
 encrypt = (file) ->
   encryptOperation = operations.add miniLockLib.encrypt
@@ -204,17 +220,27 @@ encrypt = (file) ->
     keys: window.keys
     miniLockIDs: [miniLockLib.ID.encode(window.keys.publicKey)]
     callback: (error, encrypted) ->
-      console.info "encrypted", arguments
       throw error if error
       operations.remove(encryptOperation)
-      encrypted.name = "#{file.get("name")}.minilock"
+      encrypted.name = "#{file.get("name").split(".")[0]}.minilock"
       encrypted.data.lastModified = Date.now()
       links.add {source: files.indexOf(file), target: files.length}
       encryptedFile = files.add encrypted
       encryptedFile.x = encryptedFile.px = file.x + 1
       encryptedFile.y = encryptedFile.py = file.y + 1
 
-
+decrypt = (file) ->
+  decryptOperation = operations.add miniLockLib.decrypt
+    data: file.get("data")
+    keys: window.keys
+    callback: (error, decrypted) ->
+      throw error if error
+      operations.remove(decryptOperation)
+      decrypted.data.lastModified = Date.now()
+      links.add {source: files.indexOf(file), target: files.length}
+      decryptedFile = files.add decrypted
+      decryptedFile.x = decryptedFile.px = file.x + 1
+      decryptedFile.y = decryptedFile.py = file.y + 1
 
 formatSizeOfFile = (bytes) ->
 	KB = bytes / 1024

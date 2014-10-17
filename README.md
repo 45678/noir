@@ -1,7 +1,7 @@
 Noir
 ----
 
-__Noir__ is [miniLock](https://minilock.io) encryption with minimal decoration.
+__Noir__ is a minimal [miniLock](https://minilock.io) encryption workspace.
 It mostly works in [Google Chrome](https://www.google.com/chrome/).
 
 Visit [__45678.github.io/noir__](https://45678.github.io/noir) to start a session and try it out.

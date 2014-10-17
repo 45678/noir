@@ -6,11 +6,11 @@ It mostly works in Google Chrome.
 
 Visit [__45678.github.io/noir__](https://45678.github.io/noir) to start a session and try it out.
 
-Download [__Noir.crx__](https://45678.github.io/noir/Noir.crx) for Google Chrome to keep the app on your personal computer.
-When the download is complete, open `chrome://extensions` and drag __Noir.crx__ onto the Extensions page to install it.
+Download [__Noir.crx__ for Google Chrome](https://45678.github.io/noir/Noir.crx) to keep the app on your personal computer.
+When the download is complete, open `chrome://extensions` and drag the __Noir.crx__ file onto your Extensions page to install the app.
 __Noir__ will update itself automatically when new versions are available.
 
-Or clone the __Noir__ code and run it from source:
+Or clone __Noir__ and run it from source:
 
     git clone https://github.com/45678/noir.git
     cd noir

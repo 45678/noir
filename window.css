@@ -1,0 +1,80 @@
+line, circle, svg.icon {
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+text.type,
+text.size,
+circle.size,
+svg.icon {
+  pointer-events: none;
+}
+
+body > svg.icon,
+text.type {
+  display: none;
+}
+
+/* --- */
+
+body, #view {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom:0;
+}
+
+body {
+  background: black;
+  color: white;
+}
+body.ready {
+  background: hsla(0, 0%, 33%, 1);
+  transition: background 333ms linear;
+}
+
+text {
+  fill: white;
+  font-size: 17px;
+  font-family: "Verdana";
+  text-anchor: middle;
+}
+
+svg.icon path {
+  fill: white;
+}
+
+/* --- */
+
+line.link {
+  stroke: hsla(0, 0%, 100%, 0.1);
+}
+
+/* --- */
+
+g.file.node text {
+  fill: hsl(0, 0%, 66%);
+  font-size: 9px;
+}
+
+g.file.node text.name {
+  fill: white;
+  font-size: 17px;
+}
+
+g.file.node circle.background {
+  fill: hsl(0, 0%, 33%);
+  visibility: hidden;
+}
+g.file.node:hover circle.background {
+  visibility: visible;
+}
+
+g.file.node circle.size {
+  fill: hsla(0, 0%, 100%, 0.1);
+}
+
+g.file.node circle.handle {
+  fill: transparent;
+}
+g.file.node:hover circle.handle {
+  stroke: hsla(0, 0%, 100%, 0.1);
+}

@@ -8,7 +8,7 @@ Visit [__45678.github.io/noir__](https://45678.github.io/noir) to start a sessio
 
 Download [__Noir.crx__](https://45678.github.io/noir/Noir.crx) to keep an instance on your personal computer.
 When the download is complete, open `chrome://extensions` and drag the __Noir.crx__ file onto your Extensions page to install the app.
-You can launch __Noir__ from the Chrome Apps Launcher or open __Noir__ fron your Chrome Apps folder.
+You can launch __Noir__ with the Chrome Apps Launcher or open __Noir__ from your Chrome Apps folder.
 __Noir__ will update itself automatically when new versions are available.
 
 Or clone __Noir__ and run it from source:

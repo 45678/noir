@@ -1,4 +1,4 @@
-default: bundle/window.html bundle/window.js bundle/chrome.app.background.js
+bundle: bundle/window.html bundle/window.js bundle/chrome.app.background.js
 
 bundle/window.html: window.html window.css graphics/*.svg
 	cat window.html > bundle/window.html

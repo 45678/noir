@@ -1,7 +1,7 @@
 noirAppWindow = undefined
 
 createNoirAppWindow = ->
-  options = {minWidth: 640, minHeight: 640}
+  options = {minWidth: 750, minHeight: 650}
   chrome.app.window.create "window.html", options, (appWindow) ->
     noirAppWindow = appWindow
 

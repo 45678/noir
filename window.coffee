@@ -22,12 +22,13 @@ window.trash = new Backbone.Collection
 window.links = new Backbone.Collection
 window.force = d3.layout.force()
 
-if started = sessionStorage.getItem "started"
+if (serializedKeys = sessionStorage.getItem "keys") and (started = sessionStorage.getItem "started")
   console.info "Resuming session that started #{moment(Number started).fromNow()}."
   window.keys = {publicKey: (new Uint8Array 32), secretKey: (new Uint8Array 32)}
-  serializedKeys = JSON.parse sessionStorage.getItem "keys"
-  window.keys.publicKey[index] = value for index, value of serializedKeys.publicKey
-  window.keys.secretKey[index] = value for index, value of serializedKeys.secretKey
+  parsedKeys = JSON.parse serializedKeys
+  window.keys.publicKey[index] = value for index, value of parsedKeys.publicKey
+  window.keys.secretKey[index] = value for index, value of parsedKeys.secretKey
+  window.keys.address = parsedKeys.address
 else
   console.info "Starting new session."
   sessionStorage.setItem "started", Date.now()
@@ -35,6 +36,7 @@ else
 document.addEventListener "DOMContentLoaded", (event) ->
   Function.delay 1, -> document.body.classList.add "ready"
   d3.select(document.body).append("svg").attr("id", "view")
+  insertKeys() if window.keys?
   insertAddButton()
   insertTrashButton()
   render()
@@ -58,10 +60,35 @@ render = ->
   force.start()
   renderLinks()
   renderNodes()
+  renderKeys()
   renderAddButton()
   renderTrashButton()
 
 render.cache = {}
+
+insertKeys = ->
+  group = d3.select("#view").append("g").attr("id", "keys")
+  icon = group.append -> iconGraphic("miniLockID")
+  icon.attr width: 20, height: 20, y: -40+1
+  group.append("text").attr(class: "address")
+  group.append("text").attr(class: "miniLockID")
+
+renderKeys = ->
+  d3.select("#keys").attr
+    transform: "translate(0, #{window.innerHeight})"
+  address = d3.select("#keys text.address").attr
+    x: 20
+    y: -22
+  address.text ->
+    "#{keys.address}"
+  miniLockIDicon = d3.select("#keys svg.miniLockID.icon").attr
+    x: address.node().getBBox().width + 35
+  miniLockID = d3.select("#keys text.miniLockID").attr
+    x: address.node().getBBox().width + 35 + 24
+    y: -22
+  miniLockID.text ->
+    "ID #{miniLockLib.ID.encode(keys.publicKey)}"
+
 
 insertAddButton = ->
   group = d3.select("#view").append("g").attr("id", "add")
@@ -167,8 +194,10 @@ makeKeys = ->
   operation = operations.add miniLockLib.makeKeyPair secretPhrase, emailAddress, (error, keys) ->
     throw error if error
     operations.remove(operation)
+    keys.address = emailAddress
     sessionStorage.setItem "keys", JSON.stringify keys
     window.keys = keys
+    insertKeys()
     makeREADME()
 
 document.addEventListener "change", (event) ->
@@ -284,7 +313,7 @@ iconGraphic = (name) ->
 
 # Get icon for specified media type.
 mediaTypeIconGraphic = (type="application/octet-stream", name="undefined") ->
-  console.info "iconGraphic", type
+  # console.info "iconGraphic", type
   if type in ["application/minilock"] then name = "minilock"
   if type.match("text/") then name = "text"
   if type.match("image/") then name = "image"
@@ -294,20 +323,19 @@ mediaTypeIconGraphic = (type="application/octet-stream", name="undefined") ->
 
 makeREADME = ->
   text = """
-    NOIR
-    miniLock encryption with minimal decoration
+    Noir is a miniLock encryption workspace.
 
     Drop files on the window to add them to the workspace.
 
     Or click the + button to select files from with the operating system file chooser dialog box.
 
-    Click any file in the workspace to save it.
+    Click any file in the workspace to save a copy.
 
     Click the camera button to make a photograph in the workspace.
 
     Drag a file to the trash to remove it from the workspace.
 
-    Close the window or quit to end the session.
+    Close the window or quit to end your session.
 
     • Somehow define permits.
     • Somehow define keys.

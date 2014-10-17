@@ -21,6 +21,10 @@ text.type {
   fill: transparent;
 }
 
+#trash svg.icon path {
+  fill: hsl(0, 0%, 66%);
+}
+
 /* --- */
 
 body, #view {
@@ -39,9 +43,10 @@ body.ready {
 
 text {
   fill: white;
-  font-size: 17px;
-  font-family: "Verdana";
+  font-size: 15px;
+  font-family: "Verdana", sans-serif;
   text-anchor: middle;
+  text-shadow: 0px 1px 1px hsla(0, 0%, 0%, 0.15);
 }
 
 svg.icon path {
@@ -63,7 +68,7 @@ g.file.node text {
 
 g.file.node text.name {
   fill: white;
-  font-size: 17px;
+  font-size: 15px;
 }
 
 g.file.node circle.background {
@@ -83,4 +88,21 @@ g.file.node circle.handle {
 }
 g.file.node:hover circle.handle {
   stroke: hsla(0, 0%, 100%, 0.1);
+}
+
+
+#keys text {
+  text-anchor: start;
+}
+#keys text.address {
+  fill: white;
+}
+#keys text.miniLockID,
+#keys svg.icon path {
+  fill: hsl(0, 0%, 66%);
+}
+
+text::selection {
+  fill: white;
+  background: black;
 }

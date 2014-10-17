@@ -44,3 +44,16 @@ pow:
 
 unlink_pow:
 	rm -rf ~/.pow/noir
+
+deploy:
+	git checkout master
+	git checkout gh-pages
+	git merge master
+	rm index.html window.js icon.png
+	make clean bundle
+	cp bundle/window.html index.html
+	cp bundle/window.js window.js
+	cp bundle/icon.png icon.png
+	git add --all
+	git commit --message "Committed with make deploy."
+	git checkout master

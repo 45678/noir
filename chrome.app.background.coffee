@@ -1,12 +1,12 @@
-NoirAppWindow = undefined
+noirAppWindow = undefined
 
 createNoirAppWindow = ->
   options = {minWidth: 640, minHeight: 640}
   chrome.app.window.create "window.html", options, (appWindow) ->
-    NoirAppWindow = appWindow
+    noirAppWindow = appWindow
 
 chrome.app.runtime.onLaunched.addListener ->
-  if NoirAppWindow?
-    NoirAppWindow.focus()
+  if noirAppWindow?
+    noirAppWindow.focus()
   else
     createNoirAppWindow()

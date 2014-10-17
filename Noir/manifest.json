@@ -1,0 +1,17 @@
+{
+  "manifest_version": 2,
+  "minimum_chrome_version": "40",
+  "app": {"background": {"scripts": ["chrome.app.background.js"]}},
+  "name": "Noir",
+  "description": "miniLock encryption with minimal decoration.",
+  "version": "0.0",
+  "offline_enabled": true,
+  "update_url": "https://raw.githubusercontent.com/45678/noir/master/updates.xml",
+  "icons": {
+    "32":  "Icon-032.png",
+    "64":  "Icon-064.png",
+    "128": "Icon-128.png",
+    "256": "Icon-256.png",
+    "512": "Icon-512.png"
+  }
+}
